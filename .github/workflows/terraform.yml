@@ -17,7 +17,15 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         
       - name: Set up Azure CLI
-        run: az login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          secret-id: ${{ secrets.SCREET_ID}}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
         
       - name: Install jq
         run: sudo apt-get update -y && sudo apt-get install jq -y
+      
+      - name: Parse JSON
+        run: ./sample.sh
