@@ -19,7 +19,6 @@ jobs:
       - name: Set up Azure CLI
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.CLIENT_ID }}
           secret-id: ${{ secrets.SCREET_ID}}
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
