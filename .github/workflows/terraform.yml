@@ -1,72 +1,34 @@
-name: 'terraform-Azure'
+name: Terraform Plan
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch: #this attribute will enable the manual run to the pipeline
-# Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-permissions:
-      id-token: write
-      contents: read
 
-defaults:
-  run:
-    shell: bash
 jobs:
-  terraform_plan:
-    name: 'terraform test'
+  terraform:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0  # Adjust to your desired Terraform version
 
-       # Log into Azure with OIDC integration
-    - name: 'Az CLI login'
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.CLIENT_ID }}
-        tenant-id: ${{ secrets.TENANT_ID }}
-        subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-        
- 
-    - name: terraform init
-      env:
-        STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
-        CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
-        RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
-        ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-      run: terraform init 
-#            -backend-config="storage_account_name= $STORAGE_ACCOUNT" \
-#            -backend-config="container_name= $CONTAINER_NAME" \
-#            -backend-config="resource_group_name= $RESOURCE_GROUP_NAME" \
-#            -backend-config="key=terraform.tfstate"
- 
-    - name: terraform Plan
-      env:
-        ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-      run: terraform plan 
-    
-    - name: terraform apply
-      env:
-        ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-     
-      run: terraform apply --auto-approve 
+      - name: Install jq
+        run: sudo apt-get update -y && sudo apt-get install jq -y
 
-      
-#added comment
-#storage blob data contributor
-
-#test 
+      - name: Run Terraform Plan
+        run: |
+          json_file="sample.json"
+          resource_group_name=$(jq -r '.resource_group_name' "$json_file")
+          admin_password=$(jq -r '.admin_password' "$json_file")
+          admin_username=$(jq -r '.admin_username' "$json_file")
+          size=$(jq -r '.size' "$json_file")
+          sku=$(jq -r '.sku' "$json_file")
+          storage_account_type=$(jq -r '.storage_account_type' "$json_file")
+          terraform init -chdir=config
+          terraform -chdir=config plan -var="resource_group_name=$resource_group_name" -var="admin_password=$admin_password" -var="admin_username=$admin_username" -var="size=$size" -var="sku=$sku" -var="storage_account_type=$storage_account_type"
