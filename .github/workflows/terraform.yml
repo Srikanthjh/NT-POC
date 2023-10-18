@@ -1,0 +1,72 @@
+name: 'terraform-Azure'
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: #this attribute will enable the manual run to the pipeline
+# Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+permissions:
+      id-token: write
+      contents: read
+
+defaults:
+  run:
+    shell: bash
+jobs:
+  terraform_plan:
+    name: 'terraform test'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+       # Log into Azure with OIDC integration
+    - name: 'Az CLI login'
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.CLIENT_ID }}
+        tenant-id: ${{ secrets.TENANT_ID }}
+        subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+        
+ 
+    - name: terraform init
+      env:
+        STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
+        CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+        RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
+        ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      run: terraform init 
+#            -backend-config="storage_account_name= $STORAGE_ACCOUNT" \
+#            -backend-config="container_name= $CONTAINER_NAME" \
+#            -backend-config="resource_group_name= $RESOURCE_GROUP_NAME" \
+#            -backend-config="key=terraform.tfstate"
+ 
+    - name: terraform Plan
+      env:
+        ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      run: terraform plan 
+    
+    - name: terraform apply
+      env:
+        ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+     
+      run: terraform apply --auto-approve 
+
+      
+#added comment
+#storage blob data contributor
+
+#test 
