@@ -16,13 +16,6 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         
-      - name: Set up Azure CLI
-        uses: azure/login@v1
-        with:
-          secret-id: ${{ secrets.SCREET_ID}}
-          tenant-id: ${{ secrets.TENANT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-        
       - name: Install jq
         run: sudo apt-get update -y && sudo apt-get install jq -y
       
