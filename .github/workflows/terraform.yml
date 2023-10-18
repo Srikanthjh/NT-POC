@@ -21,15 +21,3 @@ jobs:
         
       - name: Install jq
         run: sudo apt-get update -y && sudo apt-get install jq -y
-
-      - name: Run Terraform Plan
-        run: |
-          json_file="sample.json"
-          resource_group_name=$(jq -r '.resource_group_name' "$json_file")
-          admin_password=$(jq -r '.admin_password' "$json_file")
-          admin_username=$(jq -r '.admin_username' "$json_file")
-          size=$(jq -r '.size' "$json_file")
-          sku=$(jq -r '.sku' "$json_file")
-          storage_account_type=$(jq -r '.storage_account_type' "$json_file")
-          terraform -chdir=config init
-          terraform -chdir=config plan -var="resource_group_name=$resource_group_name" -var="admin_password=$admin_password" -var="admin_username=$admin_username" -var="size=$size" -var="sku=$sku" -var="storage_account_type=$storage_account_type"
