@@ -20,4 +20,4 @@ jobs:
         run: sudo apt-get update -y && sudo apt-get install jq -y
       
       - name: Parse JSON
-        run: ./sample.sh
+        run: chmod +x sample.sh | ./sample.sh
