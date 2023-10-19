@@ -33,12 +33,12 @@ jobs:
         run: chmod +x sample.sh | ./sample.sh
 
       - name: 'Az CLI login'
-        # run: az login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.CLIENT_ID }}
-          tenant-id: ${{ secrets.TENANT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+        run: az login
+        # uses: azure/login@v1
+        # with:
+        #   client-id: ${{ secrets.CLIENT_ID }}
+        #   tenant-id: ${{ secrets.TENANT_ID }}
+        #   subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
 
       - name: Terraform Init
         env:
