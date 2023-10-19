@@ -1,4 +1,4 @@
-resource_group_name = "Devops-RG"
+resource_group_name = "Devops"
 admin_password      = "Winner007!"
 admin_username      = "adminuser"
 size                = "Standard_D2s_v3"
