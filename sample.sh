@@ -67,4 +67,3 @@ echo "storage_account_type: $storage_account_type"
 
 
 # terraform -chdir=config plan -var="resource_group_name=$resource_group_name" -var="admin_password=$admin_password" -var="admin_username=$admin_username" -var="size=$size" -var="sku=$sku" -var="storage_account_type=$storage_account_type"
-
