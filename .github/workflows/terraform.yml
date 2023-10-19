@@ -29,6 +29,14 @@ jobs:
       - name: Parse JSON
         run: chmod +x sample.sh | ./sample.sh
 
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          client-screte: ${{secrets.CLIENT_SECRET}}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+
       - name: Terraform Init
         env:
           ARM_CLIENT_ID: ${{secrets.CLIENT_ID}}
