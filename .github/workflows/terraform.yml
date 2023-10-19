@@ -35,7 +35,7 @@ jobs:
       
       - name: Set Outputs
         run: |
-          OUTPUT=${{ steps.shell_script.outputs.stdout }})
+          OUTPUT=${{ steps.shell_script.outputs.stdout }}
           echo ":: set-output name=my_output::$OUTPUT"
       
       - name: Use Shell Script Output
