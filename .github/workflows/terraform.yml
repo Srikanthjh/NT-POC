@@ -33,7 +33,6 @@ jobs:
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.CLIENT_ID }}
-          creds: ${{secrets.CLIENT_SECRET}}
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
 
