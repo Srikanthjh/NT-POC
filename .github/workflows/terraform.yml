@@ -12,11 +12,11 @@ permissions:
 jobs:
   terraform:
     name: 'Terraform'
-    env:
-      ARM_CLIENT_ID: ${{secrets.CLIENT_ID}}
-      ARM_CLIENT_SCRETE: ${{secrets.CLIENT_SECRET}}
-      ARM_SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID}}
-      ARM_TENENT_ID: ${{secrets.TENANT_ID}}
+    # env:
+    #   ARM_CLIENT_ID: ${{secrets.CLIENT_ID}}
+    #   ARM_CLIENT_SCRETE: ${{secrets.CLIENT_SECRET}}
+    #   ARM_SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID}}
+    #   ARM_TENENT_ID: ${{secrets.TENANT_ID}}
     runs-on: ubuntu-latest
 
     steps:
@@ -48,12 +48,12 @@ jobs:
       #     echo "The output is: ${{ env.my_output }}"
 
       - name: 'Az CLI login'
-        run: az login
-      #   # uses: azure/login@v1
-      #   # with:
-      #   #   client-id: ${{ secrets.CLIENT_ID }}
-      #   #   tenant-id: ${{ secrets.TENANT_ID }}
-      #   #   subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+        # run: az login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
 
       - name: Terraform Init
         env:
