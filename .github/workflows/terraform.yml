@@ -35,9 +35,7 @@ jobs:
           ARM_CLIENT_SCRETE: ${{secrets.CLIENT_SECRET}}
           ARM_SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID}}
           ARM_TENENT_ID: ${{secrets.TENANT_ID}}
-        with:
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: "./config"
+        run: terraform -chdir=./config init
 
 
 
